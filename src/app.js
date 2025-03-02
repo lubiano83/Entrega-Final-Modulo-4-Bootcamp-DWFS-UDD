@@ -1,5 +1,6 @@
 import exprress from "express";
-import reservasRouter from "./routes/reservas.route.js";
+import lodgesRouter from "./routes/lodges.router.js";
+import reservationsRouter from "./routes/reservations.router.js";
 
 // Variables
 const APP = exprress();
@@ -11,7 +12,8 @@ APP.use(exprress.json());
 APP.use(exprress.urlencoded({ extended: true }));
 
 // Routes
-APP.use("/api/reservas", reservasRouter);
+APP.use("/api/lodges", lodgesRouter);
+APP.use("/api/reservations", reservationsRouter);
 
 // Método que gestiona las rutas inexistentes.
 APP.use("*", (req, res) => {

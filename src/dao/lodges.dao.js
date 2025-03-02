@@ -1,17 +1,17 @@
 import fs from 'fs/promises';
 import path from 'path';
 
-export default class FileSystemDao {
+export default class LodgesDao {
     
     constructor() {
-        this.path = path.join(process.cwd(), "src/database/reservas.database.json");
+        this.path = path.join(process.cwd(), "src/database/lodges.database.json");
     }
 
-    #generarId = (reservas) => {
+    #generarId = (lodges) => {
         let idMayor = 0;
-        reservas.forEach((reserva) => {
-            if (reserva.id > idMayor) {
-                idMayor = reserva.id;
+        lodges.forEach((lodge) => {
+            if (lodge.id > idMayor) {
+                idMayor = lodge.id;
             }
         });
         return idMayor + 1;
@@ -43,11 +43,21 @@ export default class FileSystemDao {
         }
     };
 
+    readFileById = async(id) => {
+        try {
+            const lodges = await this.readFile();
+            const lodgeDetected = lodges.find(item => item.id === id);
+            return lodgeDetected;
+        } catch (error) {
+            console.log(error.message);
+        }
+    };
+
     createFile = async(data) => {
         try {
-            const reservas = await this.readFile();
-            reservas.push({ id: this.#generarId(reservas), ...data });
-            return await this.#writeFile(reservas);
+            const lodges = await this.readFile();
+            lodges.push({ id: this.#generarId(lodges), ...data });
+            return await this.#writeFile(lodges);
         } catch (error) {
             console.log(error.message);
         }
@@ -55,9 +65,9 @@ export default class FileSystemDao {
 
     deleteFile = async(id) => {
         try {
-            const reservas = await this.readFile();
-            const reservaEliminada = reservas.filter(item => item.id !== id);
-            return  await this.#writeFile(reservaEliminada);
+            const lodges = await this.readFile();
+            const lodgesDeleted = lodges.filter(item => item.id !== id);
+            return  await this.#writeFile(lodgesDeleted);
         } catch (error) {
             console.log(error.message);
         }
@@ -65,12 +75,12 @@ export default class FileSystemDao {
 
     updateFile = async(id, data) => {
         try {
-            const reservas = await this.readFile();
-            const index = reservas.findIndex(reserva => reserva.id === id);
+            const lodges = await this.readFile();
+            const index = lodges.findIndex(item => item.id === id);
             if (index !== -1) {
-                reservas[index] = { ...reservas[index], ...data };
-                await this.#writeFile(reservas);
-                return reservas[index];
+                lodges[index] = { ...lodges[index], ...data };
+                await this.#writeFile(lodges);
+                return lodges[index];
             } 
             return null;
         } catch (error) {

@@ -1,0 +1,16 @@
+[
+	{
+		"id": 1,
+		"img": "imagen cabaña",
+		"size": "49 mt2",
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": true,
+		"price": {
+			"high": 150,
+			"medium": 100,
+			"low": 75
+		}
+	}
+]
