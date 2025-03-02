@@ -6,6 +6,8 @@ const lodgesController = new LodgesController();
 
 ROUTER.get("/", lodgesController.getLodges);
 ROUTER.post("/", lodgesController.createLodge);
+ROUTER.delete("/", lodgesController.deleteAllLodge);
+ROUTER.get("/:id", lodgesController.getLodgeById);
 ROUTER.delete("/:id", lodgesController.deleteLodge);
 ROUTER.put("/:id", lodgesController.updateLodge);
 

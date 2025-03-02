@@ -30,8 +30,8 @@ export default class ReservationsController {
             const { name, email, phone, address, lodge, arrive, leave } = data;
             if( !name, !email, !phone, !address, !lodge, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
             const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), lodge: Number(lodge), arrive: new Date(arrive), leave: new Date(leave) };
-            const reservations = await reservationsDao.createFile(modifiedData);
-            return res.status(201).send([{ message: "Reserva creado con exito..", reservations }]);
+            await reservationsDao.createFile(modifiedData);
+            return res.status(201).send([{ message: "Reserva creado con exito..", modifiedData }]);
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
