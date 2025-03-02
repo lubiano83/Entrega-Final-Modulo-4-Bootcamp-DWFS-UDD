@@ -1,6 +1,8 @@
 import ReservationsDao from "../dao/reservations.dao.js";
+import LodgesDao from "../dao/lodges.dao.js";
 
 const reservationsDao = new ReservationsDao();
+const lodgesDao = new LodgesDao();
 
 export default class ReservationsController {
 
@@ -27,11 +29,28 @@ export default class ReservationsController {
     createReservation = async(req, res) => {
         try {
             const data = req.body;
-            const { name, email, phone, address, lodge, arrive, leave } = data;
-            if( !name, !email, !phone, !address, !lodge, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), lodge: Number(lodge), arrive: new Date(arrive), leave: new Date(leave) };
-            await reservationsDao.createFile(modifiedData);
-            return res.status(201).send([{ message: "Reserva creado con exito..", modifiedData }]);
+            const { name, email, phone, address, lodgeId, arrive, leave } = data;
+            if( !name, !email, !phone, !address, !lodgeId, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
+            if(findLodge.available === true) {
+                const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), lodgeId: Number(lodgeId), arrive: new Date(arrive), leave: new Date(leave) };
+                const reservationsList = await reservationsDao.readFile();
+                const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
+                const conflict = existingReservations.some(reservation => {
+                    const reservationStart = new Date(reservation.arrive);
+                    const reservationEnd = new Date(reservation.leave);
+                    return (
+                        (modifiedData.arrive >= reservationStart && modifiedData.arrive < reservationEnd) || // Llega dentro de una reserva existente
+                        (modifiedData.leave > reservationStart && modifiedData.leave <= reservationEnd) || // Se va dentro de una reserva existente
+                        (modifiedData.arrive <= reservationStart && modifiedData.leave >= reservationEnd) // La reserva cubre totalmente otra reserva
+                    );
+                });
+                if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
+                await reservationsDao.createFile(modifiedData);
+                return res.status(201).send([{ message: "Reserva creada con éxito..", modifiedData }]);
+            } else {
+                return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
+            }
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
