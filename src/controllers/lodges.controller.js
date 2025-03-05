@@ -6,7 +6,7 @@ export default class LodgesController {
 
     getLodges = async (req, res) => {
         try {
-            const { hotel, size, bedroom, bathroom, capacity, wifi, available, sort, order } = req.query;
+            const { hotel, size, bedroom, bathroom, capacity, wifi, available, ...sortParams } = req.query;
             let lodges = await lodgesDao.readFile();
             if (hotel) lodges = lodges.filter(lodge => lodge.hotel === hotel);
             if (size) lodges = lodges.filter(lodge => Number(lodge.size) === Number(size));
@@ -15,17 +15,16 @@ export default class LodgesController {
             if (capacity) lodges = lodges.filter(lodge => Number(lodge.capacity) === Number(capacity));
             if (wifi) lodges = lodges.filter(lodge => lodge.wifi === (wifi === "true"));
             if (available) lodges = lodges.filter(lodge => lodge.available === (available === "true"));
-            if (sort && ["high", "medium", "low"].includes(sort)) {
-                lodges.sort((a, b) => {
-                    const orderFactor = order === "desc" ? -1 : 1;
-                    return (a.season[sort] - b.season[sort]) * orderFactor;
-                });
+            const [seasonKey, sortOrder] = Object.entries(sortParams)[0] || [];
+            if (seasonKey && ["high", "medium", "low"].includes(seasonKey)) {
+                const orderFactor = sortOrder === "desc" ? -1 : 1;
+                lodges.sort((a, b) => (a.season[seasonKey] - b.season[seasonKey]) * orderFactor);
             }
             return res.status(200).send({ message: "Cabañas filtradas y ordenadas.", lodges });
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor.", error: error.message });
         }
-    };       
+    };          
 
     getLodgeById = async(req, res) => {
         try {
