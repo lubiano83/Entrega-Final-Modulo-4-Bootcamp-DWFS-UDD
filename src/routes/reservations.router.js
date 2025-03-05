@@ -10,5 +10,6 @@ ROUTER.delete("/", reservationsController.deleteAllReservations);
 ROUTER.get("/:id", reservationsController.getReservationById);
 ROUTER.put("/:id", reservationsController.updateReservation);
 ROUTER.delete("/:id", reservationsController.deleteReservation);
+ROUTER.patch("/:id", reservationsController.isAlreadyPaid);
 
 export default ROUTER;

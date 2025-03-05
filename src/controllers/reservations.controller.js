@@ -73,9 +73,11 @@ export default class ReservationsController {
         try {
             const { id } = req.params;
             const data = req.body;
+            const { name, email, phone, address, lodgeId, people, arrive, leave } = data;
+            const modifyData = { name: String(name), email: String(email), phone: String(phone), address: String(address), lodgeId: Number(lodgeId), people: Number(people), arrive: Date(arrive), leave: Date(leave) };
             const updated = await reservationsDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
-            const reservation = await reservationsDao.updateFile( Number(id), data );
+            const reservation = await reservationsDao.updateFile( Number(id), modifyData );
             return res.status(200).send({ message: "Reserva modificada con exito..", reservation });
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
@@ -87,6 +89,18 @@ export default class ReservationsController {
             await reservationsDao.deleteAllFile();
             const reservations = await reservationsDao.readFile();
             return res.status(200).send({ message: "Reservas eliminadas con exito..", reservations });
+        } catch (error) {
+            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
+        }
+    };
+
+    isAlreadyPaid = async(req, res) => {
+        try {
+            const { id } = req.params;
+            const updated = await reservationsDao.readFileById( Number(id) );
+            if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
+            const reservation = await reservationsDao.updateFile( Number(id), { paid: !updated.paid });
+            return res.status(200).send({ message: "Reserva modificada con exito..", reservation });
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
