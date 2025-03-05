@@ -13,7 +13,7 @@
 			"medium": 100,
 			"low": 75
 		},
-		"available": false
+		"available": true
 	},
 	{
 		"id": 2,
@@ -29,6 +29,6 @@
 			"medium": 150,
 			"low": 100
 		},
-		"available": false
+		"available": true
 	}
 ]

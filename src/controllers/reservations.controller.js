@@ -6,14 +6,25 @@ const lodgesDao = new LodgesDao();
 
 export default class ReservationsController {
 
-    getReservations = async(req, res) => {
+    getReservations = async (req, res) => {
         try {
-            const reservations = await reservationsDao.readFile();
-            return res.status(200).send({ message: "Todas las reservas..", reservations });
+            const { lodgeId, people, paid, ...sortParams } = req.query;
+            let reservations = await reservationsDao.readFile();
+            if (lodgeId) reservations = reservations.filter(item => Number(item.lodgeId) === Number(lodgeId));
+            if (people) reservations = reservations.filter(item => Number(item.people) === Number(people));
+            if (paid) reservations = reservations.filter(item => String(item.paid) === String(paid));
+            const [sortKey, sortOrder] = Object.entries(sortParams)[0] || [];
+            if (sortKey && ["arrive", "leave"].includes(sortKey)) {
+                const orderFactor = sortOrder === "desc" ? -1 : 1;
+                reservations.sort((a, b) => {
+                    return (new Date(a[sortKey]) - new Date(b[sortKey])) * orderFactor;
+                });
+            }
+            return res.status(200).send({ message: "Todas las reservas ordenadas.", reservations });
         } catch (error) {
-            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
+            return res.status(500).send({ message: "Error interno del servidor.", error: error.message });
         }
-    };
+    };    
 
     getReservationById = async(req, res) => {
         try {
