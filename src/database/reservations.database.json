@@ -3,10 +3,24 @@
 		"id": 1,
 		"name": "papo lubiano",
 		"email": "lubiano83@gmail.com",
-		"address": "chillan",
+		"address": "concon",
 		"phone": "+56988310042",
-		"lodgeId": 2,
-		"arrive": "2025-03-06T00:00:00.000Z",
-		"leave": "2025-03-08T00:00:00.000Z"
+		"lodgeId": 1,
+		"people": 4,
+		"arrive": "2025-03-01T00:00:00.000Z",
+		"leave": "2025-03-05T00:00:00.000Z",
+		"paid": false
+	},
+	{
+		"id": 2,
+		"name": "papo lubiano",
+		"email": "lubiano83@gmail.com",
+		"address": "concon",
+		"phone": "+56988310042",
+		"lodgeId": 1,
+		"people": 4,
+		"arrive": "2025-03-05T00:00:00.000Z",
+		"leave": "2025-03-11T00:00:00.000Z",
+		"paid": false
 	}
 ]

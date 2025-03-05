@@ -29,11 +29,12 @@ export default class ReservationsController {
     createReservation = async(req, res) => {
         try {
             const data = req.body;
-            const { name, email, phone, address, lodgeId, arrive, leave } = data;
-            if( !name, !email, !phone, !address, !lodgeId, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const { name, email, phone, address, lodgeId, people, arrive, leave } = data;
+            if( !name, !email, !phone, !address, !lodgeId, !people, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
             if(findLodge.available === true) {
-                const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), phone: String(phone), lodgeId: Number(lodgeId), arrive: new Date(arrive), leave: new Date(leave) };
+                const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), phone: String(phone), lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), paid: Boolean(false) };
+                if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
                 const reservationsList = await reservationsDao.readFile();
                 const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
                 const conflict = existingReservations.some(reservation => {

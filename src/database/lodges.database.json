@@ -1,16 +1,14 @@
 [
 	{
 		"id": 1,
-		"img": [
-			"foto1",
-			"foto2"
-		],
+		"hotel": "Las Trancas",
+		"img": [],
 		"size": "49 mt2",
 		"bedroom": 2,
 		"bathroom": 1,
 		"capacity": 4,
-		"wifi": true,
-		"price": {
+		"wifi": false,
+		"season": {
 			"high": 150,
 			"medium": 100,
 			"low": 75
@@ -19,20 +17,34 @@
 	},
 	{
 		"id": 2,
-		"img": [
-			"foto1",
-			"foto2"
-		],
+		"hotel": "Las Trancas",
+		"img": [],
 		"size": "49 mt2",
 		"bedroom": 2,
 		"bathroom": 1,
 		"capacity": 4,
-		"wifi": true,
-		"price": {
+		"wifi": false,
+		"season": {
 			"high": 150,
 			"medium": 100,
 			"low": 75
 		},
-		"available": true
+		"available": false
+	},
+	{
+		"id": 3,
+		"hotel": "Las Trancas",
+		"img": [],
+		"size": "49 mt2",
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150,
+			"medium": 100,
+			"low": 75
+		},
+		"available": false
 	}
 ]

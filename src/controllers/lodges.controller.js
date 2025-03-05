@@ -27,10 +27,10 @@ export default class LodgesController {
     createLodge = async(req, res) => {
         try {
             const data = req.body;
-            const { size, bedroom, bathroom, capacity, price } = data;
-            const { high, medium, low } = price;
-            if( !size, !bedroom, !bathroom, !capacity, !high, !medium, !low ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { img: [], size: String(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(false), price: { high: Number(high), medium: Number(medium), low: Number(low) }, available: Boolean(false)};
+            const { hotel, size, bedroom, bathroom, capacity, season } = data;
+            const { high, medium, low } = season;
+            if( !hotel, !size, !bedroom, !bathroom, !capacity, !high, !medium, !low ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const modifiedData = { hotel: String(hotel), img: [], size: String(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(false), season: { high: Number(high), medium: Number(medium), low: Number(low) }, available: Boolean(false)};
             await lodgesDao.createFile(modifiedData);
             return res.status(201).send([{ message: "Cabaña creado con exito..", modifiedData }]);
         } catch (error) {
