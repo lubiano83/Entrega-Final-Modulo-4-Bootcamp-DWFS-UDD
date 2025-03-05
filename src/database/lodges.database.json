@@ -1,7 +1,7 @@
 [
 	{
 		"id": 1,
-		"hotel": "Las Trancas",
+		"hotel": "matanzas",
 		"img": [],
 		"size": 49,
 		"bedroom": 2,
@@ -13,6 +13,38 @@
 			"medium": 100,
 			"low": 75
 		},
-		"available": true
+		"available": false
+	},
+	{
+		"id": 2,
+		"hotel": "matanzas",
+		"img": [],
+		"size": 49,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150,
+			"medium": 100,
+			"low": 75
+		},
+		"available": false
+	},
+	{
+		"id": 3,
+		"hotel": "trancas",
+		"img": [],
+		"size": 49,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150,
+			"medium": 100,
+			"low": 75
+		},
+		"available": false
 	}
 ]

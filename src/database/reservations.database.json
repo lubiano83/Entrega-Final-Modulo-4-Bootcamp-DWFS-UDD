@@ -1,14 +1,1 @@
-[
-	{
-		"id": 1,
-		"name": "papo lubiano",
-		"email": "lubiano83@gmail.com",
-		"address": "concon",
-		"phone": "+56988310042",
-		"lodgeId": 1,
-		"people": 4,
-		"arrive": "2025-03-05T00:00:00.000Z",
-		"leave": "2025-03-11T00:00:00.000Z",
-		"paid": true
-	}
-]
+[]

@@ -4,14 +4,28 @@ const lodgesDao = new LodgesDao();
 
 export default class LodgesController {
 
-    getLodges = async(req, res) => {
+    getLodges = async (req, res) => {
         try {
-            const lodges = await lodgesDao.readFile();
-            return res.status(200).send({ message: "Todas las cabañas..", lodges });
+            const { hotel, size, bedroom, bathroom, capacity, wifi, available, sort, order } = req.query;
+            let lodges = await lodgesDao.readFile();
+            if (hotel) lodges = lodges.filter(lodge => lodge.hotel === hotel);
+            if (size) lodges = lodges.filter(lodge => Number(lodge.size) === Number(size));
+            if (bedroom) lodges = lodges.filter(lodge => Number(lodge.bedroom) === Number(bedroom));
+            if (bathroom) lodges = lodges.filter(lodge => Number(lodge.bathroom) === Number(bathroom));
+            if (capacity) lodges = lodges.filter(lodge => Number(lodge.capacity) === Number(capacity));
+            if (wifi) lodges = lodges.filter(lodge => lodge.wifi === (wifi === "true"));
+            if (available) lodges = lodges.filter(lodge => lodge.available === (available === "true"));
+            if (sort && ["high", "medium", "low"].includes(sort)) {
+                lodges.sort((a, b) => {
+                    const orderFactor = order === "desc" ? -1 : 1;
+                    return (a.season[sort] - b.season[sort]) * orderFactor;
+                });
+            }
+            return res.status(200).send({ message: "Cabañas filtradas y ordenadas.", lodges });
         } catch (error) {
-            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
+            return res.status(500).send({ message: "Error interno del servidor.", error: error.message });
         }
-    };
+    };       
 
     getLodgeById = async(req, res) => {
         try {
@@ -30,7 +44,7 @@ export default class LodgesController {
             const { hotel, size, bedroom, bathroom, capacity, season } = data;
             const { high, medium, low } = season;
             if( !hotel, !size, !bedroom, !bathroom, !capacity, !high, !medium, !low ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { hotel: String(hotel), img: [], size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(false), season: { high: Number(high), medium: Number(medium), low: Number(low) }, available: Boolean(false)};
+            const modifiedData = { hotel: String(hotel.toLowerCase()), img: [], size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(false), season: { high: Number(high), medium: Number(medium), low: Number(low) }, available: Boolean(false)};
             await lodgesDao.createFile(modifiedData);
             return res.status(201).send([{ message: "Cabaña creado con exito..", modifiedData }]);
         } catch (error) {
