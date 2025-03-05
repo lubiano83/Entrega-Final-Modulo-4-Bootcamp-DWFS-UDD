@@ -9,9 +9,9 @@ export default class ReservationsDao {
 
     #generarId = (reservations) => {
         let idMayor = 0;
-        reservations.forEach((reservation) => {
-            if (reservation.id > idMayor) {
-                idMayor = reservation.id;
+        reservations.forEach(item => {
+            if (item.id > idMayor) {
+                idMayor = item.id;
             }
         });
         return idMayor + 1;

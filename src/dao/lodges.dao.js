@@ -9,9 +9,9 @@ export default class LodgesDao {
 
     #generarId = (lodges) => {
         let idMayor = 0;
-        lodges.forEach((lodge) => {
-            if (lodge.id > idMayor) {
-                idMayor = lodge.id;
+        lodges.forEach(item => {
+            if (item.id > idMayor) {
+                idMayor = item.id;
             }
         });
         return idMayor + 1;
