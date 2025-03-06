@@ -1,34 +1,66 @@
 [
 	{
 		"id": 1,
-		"hotel": "trancas",
+		"hotel": "cabañas el bosque",
 		"img": [],
-		"size": 49,
+		"size": 50,
 		"bedroom": 2,
 		"bathroom": 1,
 		"capacity": 4,
 		"wifi": false,
 		"season": {
-			"high": 150,
-			"medium": 100,
-			"low": 75
+			"high": 150000,
+			"medium": 120000,
+			"low": 100000
 		},
-		"available": true
+		"available": false
 	},
 	{
 		"id": 2,
-		"hotel": "trancas",
+		"hotel": "cabañas el bosque",
 		"img": [],
-		"size": 69,
-		"bedroom": 3,
-		"bathroom": 2,
-		"capacity": 6,
+		"size": 50,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
 		"wifi": false,
 		"season": {
-			"high": 200,
-			"medium": 150,
-			"low": 100
+			"high": 150000,
+			"medium": 120000,
+			"low": 100000
 		},
-		"available": true
+		"available": false
+	},
+	{
+		"id": 3,
+		"hotel": "cabañas el bosque",
+		"img": [],
+		"size": 50,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150000,
+			"medium": 120000,
+			"low": 100000
+		},
+		"available": false
+	},
+	{
+		"id": 4,
+		"hotel": "cabañas el bosque",
+		"img": [],
+		"size": 50,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150000,
+			"medium": 120000,
+			"low": 100000
+		},
+		"available": false
 	}
 ]
