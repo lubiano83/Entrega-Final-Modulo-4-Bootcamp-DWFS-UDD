@@ -1,0 +1,230 @@
+info:
+  title: "Documentación de la App de Reservas de Cabañas"
+  description: "App dedicada a la administración y reserva de cabañas para hospedaje."
+
+paths:
+  /api/reservations:
+    get:
+      summary: Obtiene todas las reservas
+      tags:
+        - Reservations
+      responses:
+        "200":
+          description: Lista de reservas obtenida correctamente
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crea una nueva reserva
+      tags:
+        - Reservations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/createReservation"
+      responses:
+        "201":
+          description: Reserva creada correctamente
+        "400":
+          description: Valores incompletos en la solicitud
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina todas las reservas
+      tags:
+        - Reservations
+      responses:
+        "200":
+          description: Todas las reservas eliminadas correctamente
+        "500":
+          description: Error interno del servidor
+
+  /api/reservations/{id}:
+    get:
+      summary: Obtiene una reserva por su ID
+      tags:
+        - Reservations
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Reserva obtenida correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza una reserva por su ID
+      tags:
+        - Reservations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateReservation"
+      responses:
+        "200":
+          description: Reserva actualizada correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina una reserva por su ID
+      tags:
+        - Reservations
+      responses:
+        "200":
+          description: Reserva eliminada correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+    patch:
+      summary: Cambia el estado de pago de una reserva
+      tags:
+        - Reservations
+      responses:
+        "200":
+          description: Estado de pago actualizado correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Reservation:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID autogenerado de la reserva
+        name:
+          type: string
+          description: Nombre de la persona que reserva
+        email:
+          type: string
+          format: email
+          description: Email del cliente
+        phone:
+          type: string
+          description: Teléfono de contacto
+        address:
+          type: string
+          description: Dirección del cliente
+        lodgeId:
+          type: integer
+          description: ID de la cabaña reservada
+        people:
+          type: integer
+          description: Cantidad de personas
+        arrive:
+          type: string
+          format: date
+          description: Fecha de llegada
+        leave:
+          type: string
+          format: date
+          description: Fecha de salida
+        paid:
+          type: boolean
+          description: Indica si la reserva ha sido pagada
+      example:
+        id: 1
+        name: "Juan Pérez"
+        email: "juan.perez@example.com"
+        phone: "+56912345678"
+        address: "Avenida Siempre Viva 123"
+        lodgeId: 5
+        people: 4
+        arrive: "2025-07-01"
+        leave: "2025-07-07"
+        paid: false
+
+  requestBodies:
+    createReservation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la persona que reserva
+        email:
+          type: string
+          format: email
+          description: Email del cliente
+        phone:
+          type: string
+          description: Teléfono de contacto
+        address:
+          type: string
+          description: Dirección del cliente
+        lodgeId:
+          type: integer
+          description: ID de la cabaña reservada
+        people:
+          type: integer
+          description: Cantidad de personas
+        arrive:
+          type: string
+          format: date
+          description: Fecha de llegada
+        leave:
+          type: string
+          format: date
+          description: Fecha de salida
+      example:
+        name: "Juan Pérez"
+        email: "juan.perez@example.com"
+        phone: "+56912345678"
+        address: "Avenida Siempre Viva 123"
+        lodgeId: 5
+        people: 4
+        arrive: "2025-07-01"
+        leave: "2025-07-07"
+
+    updateReservation:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Nombre de la persona que reserva
+        email:
+          type: string
+          format: email
+          description: Email del cliente
+        phone:
+          type: string
+          description: Teléfono de contacto
+        address:
+          type: string
+          description: Dirección del cliente
+        lodgeId:
+          type: integer
+          description: ID de la cabaña reservada
+        people:
+          type: integer
+          description: Cantidad de personas
+        arrive:
+          type: string
+          format: date
+          description: Fecha de llegada
+        leave:
+          type: string
+          format: date
+          description: Fecha de salida
+      example:
+        name: "Juan Pérez"
+        email: "juan.perez@example.com"
+        phone: "+56912345678"
+        address: "Avenida Siempre Viva 123"
+        lodgeId: 5
+        people: 4
+        arrive: "2025-07-01"
+        leave: "2025-07-07"

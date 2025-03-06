@@ -1,0 +1,241 @@
+info:
+  title: "Documentación de la App de Reservas de Cabañas"
+  description: "App dedicada a la administración y reserva de cabañas para hospedaje."
+
+paths:
+  /api/lodges:
+    get:
+      summary: Obtiene todas las cabañas
+      tags:
+        - Lodges
+      responses:
+        "200":
+          description: Lista de cabañas obtenida correctamente
+        "500":
+          description: Error interno del servidor
+    post:
+      summary: Crea una nueva cabaña
+      tags:
+        - Lodges
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/createLodge"
+      responses:
+        "201":
+          description: Cabaña creada correctamente
+        "400":
+          description: Valores incompletos en la solicitud
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina todas las cabañas
+      tags:
+        - Lodges
+      responses:
+        "200":
+          description: Todas las cabañas eliminadas correctamente
+        "500":
+          description: Error interno del servidor
+
+  /api/lodges/{id}:
+    get:
+      summary: Obtiene una cabaña por su ID
+      tags:
+        - Lodges
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Cabaña obtenida correctamente
+        "404":
+          description: Cabaña no encontrada
+        "500":
+          description: Error interno del servidor
+    put:
+      summary: Actualiza una cabaña por su ID
+      tags:
+        - Lodges
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateLodge"
+      responses:
+        "200":
+          description: Cabaña actualizada correctamente
+        "404":
+          description: Cabaña no encontrada
+        "500":
+          description: Error interno del servidor
+    delete:
+      summary: Elimina una cabaña por su ID
+      tags:
+        - Lodges
+      responses:
+        "200":
+          description: Cabaña eliminada correctamente
+        "404":
+          description: Cabaña no encontrada
+        "500":
+          description: Error interno del servidor
+    patch:
+      summary: Cambia la disponibilidad de una cabaña
+      tags:
+        - Lodges
+      responses:
+        "200":
+          description: Disponibilidad actualizada correctamente
+        "404":
+          description: Cabaña no encontrada
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Lodge:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: ID autogenerado de la cabaña
+        hotel:
+          type: string
+          description: Nombre del hotel
+        size:
+          type: integer
+          description: Tamaño de la cabaña en metros cuadrados
+        bedroom:
+          type: integer
+          description: Cantidad de dormitorios
+        bathroom:
+          type: integer
+          description: Cantidad de baños
+        capacity:
+          type: integer
+          description: Capacidad de personas
+        wifi:
+          type: boolean
+          description: Indica si la cabaña tiene Wi-Fi
+        available:
+          type: boolean
+          description: Indica si la cabaña está disponible
+        season:
+          type: object
+          properties:
+            high:
+              type: integer
+              description: Precio en temporada alta
+            medium:
+              type: integer
+              description: Precio en temporada media
+            low:
+              type: integer
+              description: Precio en temporada baja
+      example:
+        id: 1
+        hotel: "Cabañas El Bosque"
+        size: 50
+        bedroom: 2
+        bathroom: 1
+        capacity: 4
+        wifi: true
+        available: true
+        season:
+          high: 150000
+          medium: 120000
+          low: 100000
+
+  requestBodies:
+    createLodge:
+      type: object
+      properties:
+        hotel:
+          type: string
+          description: Nombre del hotel
+        size:
+          type: integer
+          description: Tamaño de la cabaña en metros cuadrados
+        bedroom:
+          type: integer
+          description: Cantidad de dormitorios
+        bathroom:
+          type: integer
+          description: Cantidad de baños
+        capacity:
+          type: integer
+          description: Capacidad de personas
+        season:
+          type: object
+          properties:
+            high:
+              type: integer
+              description: Precio en temporada alta
+            medium:
+              type: integer
+              description: Precio en temporada media
+            low:
+              type: integer
+              description: Precio en temporada baja
+      example:
+        hotel: "Cabañas El Bosque"
+        size: 50
+        bedroom: 2
+        bathroom: 1
+        capacity: 4
+        season:
+          high: 150000
+          medium: 120000
+          low: 100000
+
+    updateLodge:
+      type: object
+      properties:
+        hotel:
+          type: string
+          description: Nombre del hotel
+        size:
+          type: integer
+          description: Tamaño de la cabaña
+        bedroom:
+          type: integer
+          description: Cantidad de dormitorios
+        bathroom:
+          type: integer
+          description: Cantidad de baños
+        capacity:
+          type: integer
+          description: Capacidad de personas
+        wifi:
+          type: boolean
+          description: Indica si la cabaña tiene Wi-Fi
+        season:
+          type: object
+          properties:
+            high:
+              type: integer
+              description: Precio en temporada alta
+            medium:
+              type: integer
+              description: Precio en temporada media
+            low:
+              type: integer
+              description: Precio en temporada baja
+      example:
+        hotel: "Cabañas El Bosque"
+        size: 60
+        bedroom: 3
+        bathroom: 2
+        capacity: 5
+        wifi: true
+        season:
+          high: 180000
+          medium: 150000
+          low: 120000
