@@ -73,7 +73,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/requestBodies/updateLodgeById"
+              $ref: "#/components/requestBodies/updateLodge"
       responses:
         "200":
           description: Cabaña actualizada correctamente
