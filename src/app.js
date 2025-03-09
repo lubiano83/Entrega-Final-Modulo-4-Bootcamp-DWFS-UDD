@@ -6,7 +6,7 @@ import swaggerUiExpress from "swagger-ui-express";
 
 // Variables
 const APP = exprress();
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
 
 // Swagger
@@ -45,4 +45,4 @@ APP.use((error, req, res) => {
 });
 
 // Listening
-APP.listen(PORT, () => console.log(`Escuchando en http://${HOST}:${PORT}`));
+APP.listen(PORT, HOST, () => console.log(`Escuchando en http://${HOST}:${PORT}`));
