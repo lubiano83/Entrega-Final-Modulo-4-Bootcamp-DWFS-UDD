@@ -46,11 +46,11 @@ paths:
       tags:
         - Reservations
       parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: integer
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Reserva obtenida correctamente
@@ -62,6 +62,12 @@ paths:
       summary: Actualiza una reserva por su ID
       tags:
         - Reservations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       requestBody:
         required: true
         content:
@@ -79,6 +85,12 @@ paths:
       summary: Elimina una reserva por su ID
       tags:
         - Reservations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Reserva eliminada correctamente
@@ -90,6 +102,12 @@ paths:
       summary: Cambia el estado de pago de una reserva
       tags:
         - Reservations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Estado de pago actualizado correctamente

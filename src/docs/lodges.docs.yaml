@@ -62,12 +62,18 @@ paths:
       summary: Actualiza una cabaña por su ID
       tags:
         - Lodges
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/requestBodies/updateLodge"
+              $ref: "#/components/requestBodies/updateLodgeById"
       responses:
         "200":
           description: Cabaña actualizada correctamente
@@ -79,6 +85,12 @@ paths:
       summary: Elimina una cabaña por su ID
       tags:
         - Lodges
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Cabaña eliminada correctamente
@@ -90,6 +102,12 @@ paths:
       summary: Cambia la disponibilidad de una cabaña
       tags:
         - Lodges
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
       responses:
         "200":
           description: Disponibilidad actualizada correctamente

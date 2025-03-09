@@ -68,7 +68,7 @@ export default class ReservationsController {
         }
     };
 
-    deleteReservation = async(req, res) => {
+    deleteReservationById = async(req, res) => {
         try {
             const { id } = req.params;
             const deleted = await reservationsDao.readFileById( Number(id) );
@@ -80,7 +80,7 @@ export default class ReservationsController {
         }
     };
 
-    updateReservation = async(req, res) => {
+    updateReservationById = async(req, res) => {
         try {
             const { id } = req.params;
             const data = req.body;

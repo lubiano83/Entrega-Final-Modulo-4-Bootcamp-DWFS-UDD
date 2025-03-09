@@ -51,7 +51,7 @@ export default class LodgesController {
         }
     };
 
-    deleteLodge = async(req, res) => {
+    deleteLodgeById = async(req, res) => {
         try {
             const { id } = req.params;
             const deleted = await lodgesDao.readFileById( Number(id) );
@@ -63,12 +63,26 @@ export default class LodgesController {
         }
     };
 
-    updateLodge = async(req, res) => {
+    updateLodgeById = async(req, res) => {
         try {
             const { id } = req.params;
             const data = req.body;
-            const { hotel, size, bedroom, bathroom, capacity, wifi, high, medium, low } = data;
-            const modifyData = { hotel: String(hotel), size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(wifi), season: { high: Number(high), medium: Number(medium), low: Number(low) }};
+            const { hotel, size, bedroom, bathroom, capacity, wifi, season } = data;
+            const modifyData = {
+                hotel: hotel ? String(hotel) : undefined,
+                size: size ? Number(size) : undefined,
+                bedroom: bedroom ? Number(bedroom) : undefined,
+                bathroom: bathroom ? Number(bathroom) : undefined,
+                capacity: capacity ? Number(capacity) : undefined,
+                wifi: wifi !== undefined ? Boolean(wifi) : undefined,
+                season: season
+                    ? { 
+                        high: season.high !== undefined ? Number(season.high) : undefined, 
+                        medium: season.medium !== undefined ? Number(season.medium) : undefined, 
+                        low: season.low !== undefined ? Number(season.low) : undefined 
+                      }
+                    : undefined
+            };
             const updated = await lodgesDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Cabaña no encontrada.." });
             const lodge = await lodgesDao.updateFile( Number(id), modifyData );
