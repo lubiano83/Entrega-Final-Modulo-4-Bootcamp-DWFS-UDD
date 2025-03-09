@@ -1,11 +1,14 @@
 {
   "name": "entrega-final",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "src/app.js",
   "type": "module",
   "scripts": {
     "start": "node src/app.js",
     "dev": "node --watch src/app.js"
+  },
+  "engines": {
+    "node": "18.x"
   },
   "keywords": [],
   "author": "",
