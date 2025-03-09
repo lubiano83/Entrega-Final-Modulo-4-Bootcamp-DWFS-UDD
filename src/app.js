@@ -7,7 +7,7 @@ import swaggerUiExpress from "swagger-ui-express";
 // Variables
 const APP = exprress();
 const PORT = 8080;
-const HOST = "localhost";
+const HOST = "0.0.0.0";
 
 // Swagger
 const swaggerOptions = {
