@@ -81,5 +81,5 @@ Si deseas contribuir, por favor sigue estos pasos:
 ## Licencia
 Este proyecto está bajo la licencia **MIT**.
 
-## Servidor en la Nube
+## Servidor en Render
 https://backend-sistema-de-reservas.onrender.com/
