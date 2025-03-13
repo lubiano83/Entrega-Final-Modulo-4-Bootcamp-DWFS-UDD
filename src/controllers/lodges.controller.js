@@ -69,9 +69,8 @@ export default class LodgesController {
             const { id } = req.params;
             const data = req.body;
             const { hotel, size, bedroom, bathroom, capacity, wifi, season } = data;
-            console.log(wifi)
-            const modifyData = { hotel: String(hotel), size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: wifi === "true" ? true : wifi === "false" ? false : wifi, season: { high: Number(season.high), medium: Number(season.medium), low: Number(season.low) }};
-            if(typeof wifi !== "boolean") return res.send({ message: "El campo: wifi, debe ser un boolean.." })
+            const modifyData = { hotel: String(hotel), size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: wifi === "true" || wifi === true ? true : wifi === "false" || wifi === false ? false : null, season: { high: Number(season.high), medium: Number(season.medium), low: Number(season.low) }};
+            if(modifyData.wifi === null) return res.send({ message: "El campo: wifi, debe ser un boolean.." });
             if(isNaN(Number(modifyData.size)) || isNaN(Number(modifyData.bedroom)) || isNaN(Number(modifyData.bathroom)) || isNaN(Number(modifyData.capacity)) || isNaN(Number(modifyData.season.high)) || isNaN(Number(modifyData.season.medium)) || isNaN(Number(modifyData.season.low))) return res.send({ message: "El cambo: size, bedroom, bathroom, capacity, high, medium, low, deben ser tipo number.." });
             const updated = await lodgesDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Cabaña no encontrada.." });

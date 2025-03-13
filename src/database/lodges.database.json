@@ -7,7 +7,7 @@
 		"bedroom": 2,
 		"bathroom": 3,
 		"capacity": 4,
-		"wifi": false,
+		"wifi": true,
 		"season": {
 			"high": 150,
 			"medium": 100,
