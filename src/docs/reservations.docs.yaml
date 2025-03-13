@@ -5,9 +5,32 @@ info:
 paths:
   /api/reservations:
     get:
-      summary: Obtiene todas las reservas
+      summary: Obtiene todas las reservas con filtros opcionales
       tags:
         - Reservations
+      parameters:
+        - name: lodgeId
+          in: query
+          schema:
+            type: integer
+        - name: people
+          in: query
+          schema:
+            type: integer
+        - name: paid
+          in: query
+          schema:
+            type: boolean
+        - name: sortKey
+          in: query
+          schema:
+            type: string
+            enum: [arrive, leave]
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
       responses:
         "200":
           description: Lista de reservas obtenida correctamente
@@ -27,7 +50,7 @@ paths:
         "201":
           description: Reserva creada correctamente
         "400":
-          description: Valores incompletos en la solicitud
+          description: Valores incompletos o incorrectos en la solicitud
         "500":
           description: Error interno del servidor
     delete:
@@ -54,29 +77,6 @@ paths:
       responses:
         "200":
           description: Reserva obtenida correctamente
-        "404":
-          description: Reserva no encontrada
-        "500":
-          description: Error interno del servidor
-    put:
-      summary: Actualiza una reserva por su ID
-      tags:
-        - Reservations
-      parameters:
-      - name: id
-        in: path
-        required: true
-        schema:
-          type: integer
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/requestBodies/updateReservation"
-      responses:
-        "200":
-          description: Reserva actualizada correctamente
         "404":
           description: Reserva no encontrada
         "500":
@@ -116,6 +116,56 @@ paths:
         "500":
           description: Error interno del servidor
 
+  /api/reservations/user/{id}:
+    put:
+      summary: Actualiza los datos del usuario en una reserva
+      tags:
+        - Reservations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateReservationUser"
+      responses:
+        "200":
+          description: Datos del usuario actualizados correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+
+  /api/reservations/lodge/{id}:
+    put:
+      summary: Actualiza la información de la cabaña en una reserva
+      tags:
+        - Reservations
+      parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/updateReservationLodge"
+      responses:
+        "200":
+          description: Datos de la reserva actualizados correctamente
+        "404":
+          description: Reserva no encontrada
+        "500":
+          description: Error interno del servidor
+
 components:
   schemas:
     Reservation:
@@ -123,44 +173,47 @@ components:
       properties:
         id:
           type: integer
-          description: ID autogenerado de la reserva
         name:
           type: string
-          description: Nombre de la persona que reserva
         email:
           type: string
           format: email
-          description: Email del cliente
         phone:
           type: string
-          description: Teléfono de contacto
         address:
-          type: string
-          description: Dirección del cliente
+          type: object
+          properties:
+            region:
+              type: string
+            city:
+              type: string
+            street:
+              type: string
+            number:
+              type: string
         lodgeId:
           type: integer
-          description: ID de la cabaña reservada
         people:
           type: integer
-          description: Cantidad de personas
         arrive:
           type: string
           format: date
-          description: Fecha de llegada
         leave:
           type: string
           format: date
-          description: Fecha de salida
         paid:
           type: boolean
-          description: Indica si la reserva ha sido pagada
       example:
         id: 1
         name: "Juan Pérez"
         email: "juan.perez@example.com"
         phone: "+56912345678"
-        address: "Avenida Siempre Viva 123"
-        lodgeId: 5
+        address:
+          region: "Valparaíso"
+          city: "Concón"
+          street: "Avenida Siempre Viva"
+          number: "123"
+        lodgeId: 1
         people: 4
         arrive: "2025-07-01"
         leave: "2025-07-07"
@@ -172,77 +225,92 @@ components:
       properties:
         name:
           type: string
-          description: Nombre de la persona que reserva
         email:
           type: string
           format: email
-          description: Email del cliente
         phone:
           type: string
-          description: Teléfono de contacto
         address:
-          type: string
-          description: Dirección del cliente
+          type: object
+          properties:
+            region:
+              type: string
+            city:
+              type: string
+            street:
+              type: string
+            number:
+              type: string
         lodgeId:
           type: integer
-          description: ID de la cabaña reservada
         people:
           type: integer
-          description: Cantidad de personas
         arrive:
           type: string
           format: date
-          description: Fecha de llegada
         leave:
           type: string
           format: date
-          description: Fecha de salida
       example:
         name: "Juan Pérez"
         email: "juan.perez@example.com"
         phone: "+56912345678"
-        address: "Avenida Siempre Viva 123"
-        lodgeId: 5
+        address:
+          region: "Valparaíso"
+          city: "Concón"
+          street: "Avenida Siempre Viva"
+          number: "123"
+        lodgeId: 1
         people: 4
         arrive: "2025-07-01"
         leave: "2025-07-07"
 
-    updateReservation:
+    updateReservationUser:
       type: object
       properties:
         name:
           type: string
-          description: Nombre de la persona que reserva
         email:
           type: string
           format: email
-          description: Email del cliente
         phone:
           type: string
-          description: Teléfono de contacto
         address:
-          type: string
-          description: Dirección del cliente
-        lodgeId:
-          type: integer
-          description: ID de la cabaña reservada
-        people:
-          type: integer
-          description: Cantidad de personas
-        arrive:
-          type: string
-          format: date
-          description: Fecha de llegada
-        leave:
-          type: string
-          format: date
-          description: Fecha de salida
+          type: object
+          properties:
+            region:
+              type: string
+            city:
+              type: string
+            street:
+              type: string
+            number:
+              type: string
       example:
         name: "Juan Pérez"
         email: "juan.perez@example.com"
         phone: "+56912345678"
-        address: "Avenida Siempre Viva 123"
-        lodgeId: 5
+        address:
+          region: "Valparaíso"
+          city: "Concón"
+          street: "Avenida Siempre Viva"
+          number: "123"
+
+    updateReservationLodge:
+      type: object
+      properties:
+        lodgeId:
+          type: integer
+        people:
+          type: integer
+        arrive:
+          type: string
+          format: date
+        leave:
+          type: string
+          format: date
+      example:
+        lodgeId: 1
         people: 4
         arrive: "2025-07-01"
         leave: "2025-07-07"

@@ -1,13 +1,52 @@
 info:
-  title: "Documentación de la App de Reservas de Cabañas"
-  description: "App dedicada a la administración y reserva de cabañas para hospedaje."
+  title: "Documentación de la App de Reservas de Cabañas - Cabañas"
+  description: "API para la administración y consulta de cabañas disponibles para hospedaje."
 
 paths:
   /api/lodges:
     get:
-      summary: Obtiene todas las cabañas
+      summary: Obtiene todas las cabañas con filtros opcionales
       tags:
         - Lodges
+      parameters:
+        - name: hotel
+          in: query
+          schema:
+            type: string
+        - name: size
+          in: query
+          schema:
+            type: integer
+        - name: bedroom
+          in: query
+          schema:
+            type: integer
+        - name: bathroom
+          in: query
+          schema:
+            type: integer
+        - name: capacity
+          in: query
+          schema:
+            type: integer
+        - name: wifi
+          in: query
+          schema:
+            type: boolean
+        - name: available
+          in: query
+          schema:
+            type: boolean
+        - name: seasonKey
+          in: query
+          schema:
+            type: string
+            enum: [high, medium, low]
+        - name: sortOrder
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
       responses:
         "200":
           description: Lista de cabañas obtenida correctamente
@@ -27,7 +66,7 @@ paths:
         "201":
           description: Cabaña creada correctamente
         "400":
-          description: Valores incompletos en la solicitud
+          description: Valores incompletos o incorrectos en la solicitud
         "500":
           description: Error interno del servidor
     delete:
@@ -123,40 +162,29 @@ components:
       properties:
         id:
           type: integer
-          description: ID autogenerado de la cabaña
         hotel:
           type: string
-          description: Nombre del hotel
         size:
           type: integer
-          description: Tamaño de la cabaña en metros cuadrados
         bedroom:
           type: integer
-          description: Cantidad de dormitorios
         bathroom:
           type: integer
-          description: Cantidad de baños
         capacity:
           type: integer
-          description: Capacidad de personas
         wifi:
           type: boolean
-          description: Indica si la cabaña tiene Wi-Fi
         available:
           type: boolean
-          description: Indica si la cabaña está disponible
         season:
           type: object
           properties:
             high:
               type: integer
-              description: Precio en temporada alta
             medium:
               type: integer
-              description: Precio en temporada media
             low:
               type: integer
-              description: Precio en temporada baja
       example:
         id: 1
         hotel: "Cabañas El Bosque"
@@ -177,31 +205,23 @@ components:
       properties:
         hotel:
           type: string
-          description: Nombre del hotel
         size:
           type: integer
-          description: Tamaño de la cabaña en metros cuadrados
         bedroom:
           type: integer
-          description: Cantidad de dormitorios
         bathroom:
           type: integer
-          description: Cantidad de baños
         capacity:
           type: integer
-          description: Capacidad de personas
         season:
           type: object
           properties:
             high:
               type: integer
-              description: Precio en temporada alta
             medium:
               type: integer
-              description: Precio en temporada media
             low:
               type: integer
-              description: Precio en temporada baja
       example:
         hotel: "Cabañas El Bosque"
         size: 50
@@ -218,34 +238,25 @@ components:
       properties:
         hotel:
           type: string
-          description: Nombre del hotel
         size:
           type: integer
-          description: Tamaño de la cabaña
         bedroom:
           type: integer
-          description: Cantidad de dormitorios
         bathroom:
           type: integer
-          description: Cantidad de baños
         capacity:
           type: integer
-          description: Capacidad de personas
         wifi:
           type: boolean
-          description: Indica si la cabaña tiene Wi-Fi
         season:
           type: object
           properties:
             high:
               type: integer
-              description: Precio en temporada alta
             medium:
               type: integer
-              description: Precio en temporada media
             low:
               type: integer
-              description: Precio en temporada baja
       example:
         hotel: "Cabañas El Bosque"
         size: 60
