@@ -13,6 +13,38 @@
 			"medium": 100,
 			"low": 75
 		},
+		"available": true
+	},
+	{
+		"id": 2,
+		"hotel": "cabañas el bosque",
+		"img": [],
+		"size": 50,
+		"bedroom": 2,
+		"bathroom": 1,
+		"capacity": 4,
+		"wifi": false,
+		"season": {
+			"high": 150000,
+			"medium": 120000,
+			"low": 100000
+		},
+		"available": false
+	},
+	{
+		"id": 3,
+		"hotel": "Cabañas El Bosque",
+		"img": [],
+		"size": 60,
+		"bedroom": 3,
+		"bathroom": 2,
+		"capacity": 5,
+		"wifi": true,
+		"season": {
+			"high": 180000,
+			"medium": 150000,
+			"low": 120000
+		},
 		"available": false
 	}
 ]
