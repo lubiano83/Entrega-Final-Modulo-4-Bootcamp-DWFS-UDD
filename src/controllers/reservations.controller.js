@@ -41,10 +41,17 @@ export default class ReservationsController {
         try {
             const data = req.body;
             const { name, email, phone, address, lodgeId, people, arrive, leave } = data;
-            if( !name, !email, !phone, !address, !lodgeId, !people, !arrive, !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const { region, city, street, number } = address;
+            if( !name || !email || !phone || !region || !city || !street || !number || !lodgeId || !people || !arrive || !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const modifiedData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }, lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), paid: Boolean(false) };
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) return res.send({ message: "Debes ingresar un email válido.." });
+            const phoneRegex = /^\+569\d{8}$/;
+            if (!phoneRegex.test(phone)) return res.send({ message: "Debes ingresar un telefono válido.." });
+            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
+            if(!findLodge) return res.send({ message: "Cabaña no econtrada.." });
             if(findLodge.available === true) {
-                const modifiedData = { name: name.toLowerCase(), email: email.toLowerCase(), address: address.toLowerCase(), phone: String(phone), lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), paid: Boolean(false) };
                 if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
                 const reservationsList = await reservationsDao.readFile();
                 const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
@@ -80,16 +87,56 @@ export default class ReservationsController {
         }
     };
 
-    updateReservationById = async(req, res) => {
+    updateReservationUserById = async(req, res) => {
         try {
             const { id } = req.params;
             const data = req.body;
-            const { name, email, phone, address, lodgeId, people, arrive, leave } = data;
-            const modifyData = { name: String(name), email: String(email), phone: String(phone), address: String(address), lodgeId: Number(lodgeId), people: Number(people), arrive: Date(arrive), leave: Date(leave) };
+            const { name, email, phone, address } = data;
+            const { region, city, street, number } = address;
+            if(!name || !email || !phone || !region || !city || !street || !number) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const modifyData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }};
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) return res.send({ message: "Debes ingresar un email válido.." });
+            const phoneRegex = /^\+569\d{8}$/;
+            if (!phoneRegex.test(phone)) return res.send({ message: "Debes ingresar un telefono válido.." });
             const updated = await reservationsDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
             const reservation = await reservationsDao.updateFile( Number(id), modifyData );
             return res.status(200).send({ message: "Reserva modificada con exito..", reservation });
+        } catch (error) {
+            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
+        }
+    };
+
+    updateReservationLodgeById = async(req, res) => {
+        try {
+            const { id } = req.params;
+            const data = req.body;
+            const { lodgeId, people, arrive, leave } = data;
+            if(!lodgeId || !people || !arrive || !leave) return res.status(400).send({ message: "Todos los campos son requeridos.." });
+            const modifiedData = { lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave) };
+            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
+            const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
+            if(!findLodge) return res.send({ message: "Cabaña no econtrada.." });
+            if(findLodge.available === true) {
+                if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
+                const reservationsList = await reservationsDao.readFile();
+                const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
+                const conflict = existingReservations.some(reservation => {
+                    const reservationStart = new Date(reservation.arrive);
+                    const reservationEnd = new Date(reservation.leave);
+                    return (
+                        (modifiedData.arrive >= reservationStart && modifiedData.arrive < reservationEnd) || // Llega dentro de una reserva existente
+                        (modifiedData.leave > reservationStart && modifiedData.leave <= reservationEnd) || // Se va dentro de una reserva existente
+                        (modifiedData.arrive <= reservationStart && modifiedData.leave >= reservationEnd) // La reserva cubre totalmente otra reserva
+                    );
+                });
+                if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
+                const reservation = await reservationsDao.updateFile( Number(id), modifiedData );
+                return res.status(201).send([{ message: "Reserva creada con éxito..", reservation }]);
+            } else {
+                return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
+            }
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
