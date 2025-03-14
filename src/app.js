@@ -1,27 +1,12 @@
 import exprress from "express";
 import lodgesRouter from "./routes/lodges.router.js";
 import reservationsRouter from "./routes/reservations.router.js";
-import swaggerJSDoc from 'swagger-jsdoc';
-import swaggerUiExpress from "swagger-ui-express";
+import { swaggerServe, swaggerSetup } from "./config/swagger.config.js";
 
 // Variables
 const APP = exprress();
 const PORT = process.env.PORT || 8080;
 const HOST = "0.0.0.0";
-
-// Swagger
-const swaggerOptions = {
-    definition: {
-        openapi: "3.0.1",
-        info: {
-            title: "Documentación de la App de Reservas de Cabañas",
-            description: "App dedicada a la administración y reserva de cabañas para hospedaje."
-        }
-    },
-    apis: ["./src/docs/*.yaml"] // Esto lee todos las carpetas y sus archivos .yaml dentro de docs.
-}
-
-const specs = swaggerJSDoc(swaggerOptions);
 
 // Middlewares
 APP.use(exprress.json());
@@ -31,7 +16,7 @@ APP.use(exprress.urlencoded({ extended: true }));
 APP.get("/", (req, res) => res.send(`<h1>Este es nuestro backend de un sistema de reservas!!</h1><br/><a href="/api/lodges" target="_blank"><button>lodges</button></a> <a href="/api/reservations" target="_blank"><button>reservations</button></a> <a href="/api/docs" target="_blank"><button>docs</button></a>`));
 APP.use("/api/lodges", lodgesRouter);
 APP.use("/api/reservations", reservationsRouter);
-APP.use("/api/docs", swaggerUiExpress.serve, swaggerUiExpress.setup(specs));
+APP.use("/api/docs", swaggerServe, swaggerSetup);
 
 // Método que gestiona las rutas inexistentes.
 APP.use("*", (req, res) => {
