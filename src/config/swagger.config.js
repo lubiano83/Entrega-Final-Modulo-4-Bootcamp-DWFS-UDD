@@ -1,4 +1,5 @@
 import swaggerJSDoc from 'swagger-jsdoc';
+import swaggerUiExpress from "swagger-ui-express";
 
 const swaggerOptions = {
     definition: {
@@ -11,6 +12,8 @@ const swaggerOptions = {
     apis: ["./src/docs/*.yaml"] // Esto lee todos las carpetas y sus archivos .yaml dentro de docs.
 }
 
-const specs = swaggerJSDoc(swaggerOptions);
+const swaggerSpecs = swaggerJSDoc(swaggerOptions);
+const swaggerServe = swaggerUiExpress.serve;
+const swaggerSetup = swaggerUiExpress.setup(swaggerSpecs);
 
-export default specs;
+export { swaggerServe, swaggerSetup };
