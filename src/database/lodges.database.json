@@ -1,1 +1,18 @@
-[]
+[
+	{
+		"id": 1,
+		"hotel": "las trancas",
+		"img": [],
+		"size": 69,
+		"bedroom": 3,
+		"bathroom": 2,
+		"capacity": 6,
+		"wifi": false,
+		"season": {
+			"high": 200,
+			"medium": 150,
+			"low": 100
+		},
+		"available": false
+	}
+]
