@@ -14,7 +14,7 @@ APP.use(exprress.json());
 APP.use(exprress.urlencoded({ extended: true }));
 
 // Routes
-APP.get("/", (req, res) => res.send(`<h1>Este es nuestro backend de un sistema de reservas!!</h1><br/><a href="/api/lodges" target="_blank"><button>lodges</button></a> <a href="/api/reservations" target="_blank"><button>reservations</button></a> <a href="/api/docs" target="_blank"><button>docs</button></a>`));
+APP.get("/", (req, res) => res.send(`<h1>Este es nuestro backend de un sistema de reservas!!</h1><br/><a href="/api/lodges" target="_blank"><button>lodges</button></a> <a href="/api/reservations" target="_blank"><button>reservations</button></a> <a href="/api/records" target="_blank"><button>records</button></a> <a href="/api/docs" target="_blank"><button>docs</button></a>`));
 APP.use("/api/lodges", lodgesRouter);
 APP.use("/api/reservations", reservationsRouter);
 APP.use("/api/records", recordsRouter);
