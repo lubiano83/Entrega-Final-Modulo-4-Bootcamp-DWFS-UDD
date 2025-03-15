@@ -1,8 +1,10 @@
 import ReservationsDao from "../dao/reservations.dao.js";
 import LodgesDao from "../dao/lodges.dao.js";
+import RecordsDao from "../dao/records.dao.js";
 
 const reservationsDao = new ReservationsDao();
 const lodgesDao = new LodgesDao();
+const recordsDao = new RecordsDao();
 
 export default class ReservationsController {
 
@@ -158,6 +160,8 @@ export default class ReservationsController {
             const updated = await reservationsDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
             const reservation = await reservationsDao.updateFile( Number(id), { paid: !updated.paid });
+            await recordsDao.createFile(reservation);
+            await reservationsDao.deleteFile( Number(id) );
             return res.status(200).send({ message: "Reserva modificada con exito..", reservation });
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });

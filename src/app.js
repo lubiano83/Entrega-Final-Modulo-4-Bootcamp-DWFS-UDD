@@ -1,6 +1,7 @@
 import exprress from "express";
 import lodgesRouter from "./routes/lodges.router.js";
 import reservationsRouter from "./routes/reservations.router.js";
+import recordsRouter from "./routes/records.router.js";
 import { swaggerServe, swaggerSetup } from "./config/swagger.config.js";
 
 // Variables
@@ -16,6 +17,7 @@ APP.use(exprress.urlencoded({ extended: true }));
 APP.get("/", (req, res) => res.send(`<h1>Este es nuestro backend de un sistema de reservas!!</h1><br/><a href="/api/lodges" target="_blank"><button>lodges</button></a> <a href="/api/reservations" target="_blank"><button>reservations</button></a> <a href="/api/docs" target="_blank"><button>docs</button></a>`));
 APP.use("/api/lodges", lodgesRouter);
 APP.use("/api/reservations", reservationsRouter);
+APP.use("/api/records", recordsRouter);
 APP.use("/api/docs", swaggerServe, swaggerSetup);
 
 // Método que gestiona las rutas inexistentes.
