@@ -161,9 +161,10 @@ export default class ReservationsController {
             if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
             const reservation = await reservationsDao.updateFile( Number(id), { paid: !updated.paid });
             const lodge = await lodgesDao.readFileById( Number(reservation.lodgeId) );
-            await recordsDao.createFile({ payload: { ...reservation, lodgeId: lodge }});
+            const payload = { ...reservation, lodgeId: lodge }
+            await recordsDao.createFile({ payload });
             await reservationsDao.deleteFile( Number(id) );
-            return res.status(200).send({ message: "Reserva registrada con exito..", lodge, reservation });
+            return res.status(200).send({ message: "Registro creado con exito..", payload });
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
