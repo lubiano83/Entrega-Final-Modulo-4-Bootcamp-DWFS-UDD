@@ -21,7 +21,7 @@ export default class LodgesDao {
         try {
             await fs.writeFile(this.path, JSON.stringify(data, null, "\t"));
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -39,7 +39,7 @@ export default class LodgesDao {
             const data = await fs.readFile(this.path, "utf8");
             return JSON.parse(data);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -49,7 +49,7 @@ export default class LodgesDao {
             const lodgeDetected = lodges.find(item => item.id === id);
             return lodgeDetected;
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -59,7 +59,7 @@ export default class LodgesDao {
             lodges.push({ id: this.#generarId(lodges), ...data });
             return await this.#writeFile(lodges);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -69,7 +69,7 @@ export default class LodgesDao {
             const lodgesDeleted = lodges.filter(item => item.id !== id);
             return  await this.#writeFile(lodgesDeleted);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -84,7 +84,7 @@ export default class LodgesDao {
             } 
             return null;
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -92,7 +92,7 @@ export default class LodgesDao {
         try {
             await this.#writeFile([]);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 }

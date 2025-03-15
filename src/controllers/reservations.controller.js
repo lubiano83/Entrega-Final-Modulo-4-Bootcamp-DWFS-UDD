@@ -45,12 +45,12 @@ export default class ReservationsController {
             if( !name || !email || !phone || !region || !city || !street || !number || !lodgeId || !people || !arrive || !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
             const modifiedData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }, lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), paid: Boolean(false) };
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) return res.send({ message: "Debes ingresar un email válido.." });
+            if (!emailRegex.test(email)) return res.status(400).send({ message: "Debes ingresar un email válido.." });
             const phoneRegex = /^\+569\d{8}$/;
-            if (!phoneRegex.test(phone)) return res.send({ message: "Debes ingresar un telefono válido.." });
-            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
+            if (!phoneRegex.test(phone)) return res.status(400).send({ message: "Debes ingresar un telefono válido.." });
+            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
-            if(!findLodge) return res.send({ message: "Cabaña no econtrada.." });
+            if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });
             if(findLodge.available === true) {
                 if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
                 const reservationsList = await reservationsDao.readFile();
@@ -96,9 +96,9 @@ export default class ReservationsController {
             if(!name || !email || !phone || !region || !city || !street || !number) return res.status(400).send({ message: "Todos los campos son requeridos.." });
             const modifyData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }};
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) return res.send({ message: "Debes ingresar un email válido.." });
+            if (!emailRegex.test(email)) return res.status(400).send({ message: "Debes ingresar un email válido.." });
             const phoneRegex = /^\+569\d{8}$/;
-            if (!phoneRegex.test(phone)) return res.send({ message: "Debes ingresar un telefono válido.." });
+            if (!phoneRegex.test(phone)) return res.status(400).send({ message: "Debes ingresar un telefono válido.." });
             const updated = await reservationsDao.readFileById( Number(id) );
             if (!updated) return res.status(404).send({ message: "Reserva no encontrada.." });
             const reservation = await reservationsDao.updateFile( Number(id), modifyData );
@@ -115,9 +115,9 @@ export default class ReservationsController {
             const { lodgeId, people, arrive, leave } = data;
             if(!lodgeId || !people || !arrive || !leave) return res.status(400).send({ message: "Todos los campos son requeridos.." });
             const modifiedData = { lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave) };
-            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
+            if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
-            if(!findLodge) return res.send({ message: "Cabaña no econtrada.." });
+            if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });
             if(findLodge.available === true) {
                 if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
                 const reservationsList = await reservationsDao.readFile();

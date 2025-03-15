@@ -21,7 +21,7 @@ export default class ReservationsDao {
         try {
             return await fs.writeFile(this.path, JSON.stringify(data, null, "\t"));
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -39,7 +39,7 @@ export default class ReservationsDao {
             const data = await fs.readFile(this.path, "utf8");
             return JSON.parse(data);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -49,7 +49,7 @@ export default class ReservationsDao {
             const reservationDetected = reservations.find(item => item.id === id);
             return reservationDetected;
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -59,7 +59,7 @@ export default class ReservationsDao {
             reservations.push({ id: this.#generarId(reservations), ...data });
             return await this.#writeFile(reservations);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -69,7 +69,7 @@ export default class ReservationsDao {
             const reservationDeleted = reservations.filter(item => item.id !== id);
             return  await this.#writeFile(reservationDeleted);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -84,7 +84,7 @@ export default class ReservationsDao {
             } 
             return null;
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 
@@ -92,7 +92,7 @@ export default class ReservationsDao {
         try {
             return await this.#writeFile([]);
         } catch (error) {
-            console.log(error.message);
+            throw new Error(error.message);
         }
     };
 }
