@@ -1,0 +1,127 @@
+info:
+  title: "Seasons API"
+  description: "API para gestionar temporadas (high y mid season)."
+
+paths:
+  /:
+    post:
+      summary: "Establece las fechas de las temporadas"
+      description: "Permite registrar las fechas de inicio y fin de la temporada alta y media en un solo objeto."
+      tags:
+        - "Temporadas"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                highSeasonStart:
+                  type: object
+                  properties:
+                    month:
+                      type: integer
+                      example: 12
+                    day:
+                      type: integer
+                      example: 15
+                highSeasonEnd:
+                  type: object
+                  properties:
+                    month:
+                      type: integer
+                      example: 2
+                    day:
+                      type: integer
+                      example: 28
+                midSeasonStart:
+                  type: object
+                  properties:
+                    month:
+                      type: integer
+                      example: 6
+                    day:
+                      type: integer
+                      example: 1
+                midSeasonEnd:
+                  type: object
+                  properties:
+                    month:
+                      type: integer
+                      example: 9
+                    day:
+                      type: integer
+                      example: 30
+      responses:
+        "200":
+          description: "Temporadas actualizadas correctamente"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Temporadas actualizadas correctamente"
+                  seasons:
+                    type: object
+                    properties:
+                      highSeasonStart:
+                        type: object
+                        properties:
+                          month:
+                            type: integer
+                            example: 12
+                          day:
+                            type: integer
+                            example: 15
+                      highSeasonEnd:
+                        type: object
+                        properties:
+                          month:
+                            type: integer
+                            example: 2
+                          day:
+                            type: integer
+                            example: 28
+                      midSeasonStart:
+                        type: object
+                        properties:
+                          month:
+                            type: integer
+                            example: 6
+                          day:
+                            type: integer
+                            example: 1
+                      midSeasonEnd:
+                        type: object
+                        properties:
+                          month:
+                            type: integer
+                            example: 9
+                          day:
+                            type: integer
+                            example: 30
+        "400":
+          description: "Solicitud incorrecta. Faltan datos obligatorios."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Todos los campos de temporada son obligatorios."
+        "500":
+          description: "Error interno del servidor."
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "Error interno del servidor"
+                  error:
+                    type: string
+                    example: "Detalles del error"

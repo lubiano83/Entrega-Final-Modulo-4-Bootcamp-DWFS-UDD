@@ -1,10 +1,12 @@
 import ReservationsDao from "../dao/reservations.dao.js";
 import LodgesDao from "../dao/lodges.dao.js";
 import RecordsDao from "../dao/records.dao.js";
+import SeasonsDao from "../dao/seasons.dao.js";
 
 const reservationsDao = new ReservationsDao();
 const lodgesDao = new LodgesDao();
 const recordsDao = new RecordsDao();
+const seasonsDao = new SeasonsDao();
 
 export default class ReservationsController {
 
@@ -12,10 +14,12 @@ export default class ReservationsController {
         try {
             const lodge = await lodgesDao.readFileById( Number(lodgeId) );
             const year = date.getFullYear();
-            const highSeasonStart = new Date(year, 5, 15);
-            const highSeasonEnd = new Date(year, 8, 15);
-            const midSeasonStart = new Date(year, 8, 15);
-            const midSeasonEnd = new Date(year + 1, 2, 15);
+            const seasons = await seasonsDao.readFile();
+            if(seasons.length === 0) throw new Error("Primero debes establecer las temporadas..");
+            const highSeasonStart = new Date(year, seasons[0].highSeasonStart.month - 1, seasons[0].highSeasonStart.day);
+            const highSeasonEnd = new Date(year, seasons[0].highSeasonEnd.month - 1, seasons[0].highSeasonEnd.day);
+            const midSeasonStart = new Date(year, seasons[0].midSeasonStart.month - 1, seasons[0].midSeasonStart.day);
+            const midSeasonEnd = new Date(year + 1, seasons[0].midSeasonEnd.month - 1, seasons[0].midSeasonEnd.day);
             if (date >= highSeasonStart && date < highSeasonEnd) return lodge.season.high;
             if (date >= midSeasonStart && date < midSeasonEnd) return lodge.season.medium;
             return lodge.season.low;

@@ -1,0 +1,21 @@
+[
+	{
+		"id": 1,
+		"highSeasonStart": {
+			"month": 6,
+			"day": 15
+		},
+		"highSeasonEnd": {
+			"month": 9,
+			"day": 15
+		},
+		"midSeasonStart": {
+			"month": 9,
+			"day": 15
+		},
+		"midSeasonEnd": {
+			"month": 3,
+			"day": 15
+		}
+	}
+]
