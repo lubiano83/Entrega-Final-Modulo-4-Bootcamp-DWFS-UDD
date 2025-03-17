@@ -1,1 +1,38 @@
-[]
+[
+	{
+		"id": 1,
+		"name": "papo lubiano",
+		"email": "lubiano83@gmail.com",
+		"phone": "+56988310042",
+		"address": {
+			"region": "valparaiso",
+			"city": "concon",
+			"street": "calle del sol",
+			"number": "85"
+		},
+		"lodgeId": 1,
+		"people": 4,
+		"arrive": "2025-03-07T00:00:00.000Z",
+		"leave": "2025-03-10T00:00:00.000Z",
+		"price": 300,
+		"paid": false
+	},
+	{
+		"id": 2,
+		"name": "papo lubiano",
+		"email": "lubiano83@gmail.com",
+		"phone": "+56988310042",
+		"address": {
+			"region": "valparaiso",
+			"city": "concon",
+			"street": "calle del sol",
+			"number": "85"
+		},
+		"lodgeId": 1,
+		"people": 4,
+		"arrive": "2025-03-10T03:00:00.000Z",
+		"leave": "2025-03-16T00:00:00.000Z",
+		"price": 600,
+		"paid": false
+	}
+]

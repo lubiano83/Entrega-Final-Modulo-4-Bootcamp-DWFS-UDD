@@ -8,6 +8,58 @@ const recordsDao = new RecordsDao();
 
 export default class ReservationsController {
 
+    #getPricePerDay = async(date, lodgeId) => {
+        try {
+            const lodge = await lodgesDao.readFileById( Number(lodgeId) );
+            const year = date.getFullYear();
+            const highSeasonStart = new Date(year, 5, 15);
+            const highSeasonEnd = new Date(year, 8, 15);
+            const midSeasonStart = new Date(year, 8, 15);
+            const midSeasonEnd = new Date(year + 1, 2, 15);
+            if (date >= highSeasonStart && date < highSeasonEnd) return lodge.season.high;
+            if (date >= midSeasonStart && date < midSeasonEnd) return lodge.season.medium;
+            return lodge.season.low;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    };
+    
+    #calculateTotalPrice = async(arrive, leave, lodgeId) => {
+        try {
+            let totalPrice = 0;
+            let currentDate = new Date(arrive);
+            const endDate = new Date(leave);
+            while (currentDate < endDate) {
+                totalPrice += await this.#getPricePerDay(currentDate, lodgeId);
+                currentDate.setDate(currentDate.getDate() + 1);
+            }
+            return totalPrice;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    };
+
+    #confirmReservationDate = async (modifiedData, lodgeId, id) => {
+        try {
+            const reservationsList = await reservationsDao.readFile();
+            let currentReservation = null;
+            if (id) currentReservation = await reservationsDao.readFileById(Number(id));
+            const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId) && (!currentReservation || item.id !== currentReservation.id));
+            const conflict = existingReservations.some(reservation => {
+                const reservationStart = new Date(reservation.arrive);
+                const reservationEnd = new Date(reservation.leave);
+                return (
+                    (modifiedData.arrive >= reservationStart && modifiedData.arrive < reservationEnd) ||
+                    (modifiedData.leave > reservationStart && modifiedData.leave <= reservationEnd) ||
+                    (modifiedData.arrive <= reservationStart && modifiedData.leave >= reservationEnd)
+                );
+            });
+            return conflict;
+        } catch (error) {
+            throw new Error(error.message);
+        }
+    };
+
     getReservations = async (req, res) => {
         try {
             const { lodgeId, people, paid, ...sortParams } = req.query;
@@ -44,28 +96,19 @@ export default class ReservationsController {
             const data = req.body;
             const { name, email, phone, address, lodgeId, people, arrive, leave } = data;
             const { region, city, street, number } = address;
+            const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
+            if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });    
             if( !name || !email || !phone || !region || !city || !street || !number || !lodgeId || !people || !arrive || !leave ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }, lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), paid: Boolean(false) };
+            let price = await this.#calculateTotalPrice(arrive, leave, lodgeId);
+            const modifiedData = { name: name.toLowerCase().trim(), email: email.toLowerCase().trim(), phone: String(phone), address: { region: region.toLowerCase().trim(), city: city.toLowerCase().trim(), street: street.toLowerCase().trim(), number: String(number) }, lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave), price: Number(price), paid: Boolean(false) };
             const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             if (!emailRegex.test(email)) return res.status(400).send({ message: "Debes ingresar un email válido.." });
             const phoneRegex = /^\+569\d{8}$/;
             if (!phoneRegex.test(phone)) return res.status(400).send({ message: "Debes ingresar un telefono válido.." });
             if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
-            const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
-            if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });
             if(findLodge.available === true) {
                 if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
-                const reservationsList = await reservationsDao.readFile();
-                const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
-                const conflict = existingReservations.some(reservation => {
-                    const reservationStart = new Date(reservation.arrive);
-                    const reservationEnd = new Date(reservation.leave);
-                    return (
-                        (modifiedData.arrive >= reservationStart && modifiedData.arrive < reservationEnd) || // Llega dentro de una reserva existente
-                        (modifiedData.leave > reservationStart && modifiedData.leave <= reservationEnd) || // Se va dentro de una reserva existente
-                        (modifiedData.arrive <= reservationStart && modifiedData.leave >= reservationEnd) // La reserva cubre totalmente otra reserva
-                    );
-                });
+                const conflict = await this.#confirmReservationDate(modifiedData, lodgeId);
                 if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
                 await reservationsDao.createFile(modifiedData);
                 return res.status(201).send([{ message: "Reserva creada con éxito..", modifiedData }]);
@@ -115,24 +158,15 @@ export default class ReservationsController {
             const { id } = req.params;
             const data = req.body;
             const { lodgeId, people, arrive, leave } = data;
+            let price = await this.#calculateTotalPrice(arrive, leave, lodgeId);
             if(!lodgeId || !people || !arrive || !leave) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { lodgeId: Number(lodgeId), people: Number(people), arrive: new Date(arrive), leave: new Date(leave) };
+            const modifiedData = { lodgeId: Number(lodgeId), people: Number(people), price: Number(price), arrive: new Date(arrive), leave: new Date(leave) };
             if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
             if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });
             if(findLodge.available === true) {
                 if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
-                const reservationsList = await reservationsDao.readFile();
-                const existingReservations = reservationsList.filter(item => item.lodgeId === Number(lodgeId));
-                const conflict = existingReservations.some(reservation => {
-                    const reservationStart = new Date(reservation.arrive);
-                    const reservationEnd = new Date(reservation.leave);
-                    return (
-                        (modifiedData.arrive >= reservationStart && modifiedData.arrive < reservationEnd) || // Llega dentro de una reserva existente
-                        (modifiedData.leave > reservationStart && modifiedData.leave <= reservationEnd) || // Se va dentro de una reserva existente
-                        (modifiedData.arrive <= reservationStart && modifiedData.leave >= reservationEnd) // La reserva cubre totalmente otra reserva
-                    );
-                });
+                const conflict = await this.#confirmReservationDate(modifiedData, lodgeId, id);
                 if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
                 const reservation = await reservationsDao.updateFile( Number(id), modifiedData );
                 return res.status(201).send([{ message: "Reserva creada con éxito..", reservation }]);
