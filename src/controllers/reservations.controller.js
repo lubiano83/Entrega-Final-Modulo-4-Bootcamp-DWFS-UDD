@@ -106,15 +106,12 @@ export default class ReservationsController {
             const phoneRegex = /^\+569\d{8}$/;
             if (!phoneRegex.test(phone)) return res.status(400).send({ message: "Debes ingresar un telefono válido.." });
             if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
-            if(findLodge.available === true) {
-                if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
-                const conflict = await this.#confirmReservationDate(modifiedData, lodgeId);
-                if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
-                await reservationsDao.createFile(modifiedData);
-                return res.status(201).send([{ message: "Reserva creada con éxito..", modifiedData }]);
-            } else {
-                return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
-            }
+            if(findLodge.available === false) return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
+            if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
+            const conflict = await this.#confirmReservationDate(modifiedData, lodgeId);
+            if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
+            await reservationsDao.createFile(modifiedData);
+            return res.status(201).send([{ message: "Reserva creada con éxito..", modifiedData }]);
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
@@ -164,15 +161,12 @@ export default class ReservationsController {
             if(isNaN(Number(lodgeId)) || isNaN(Number(people))) return res.status(400).send({ message: "El campo: lodgeId y people, deben ser tipo number.." });
             const findLodge = await lodgesDao.readFileById( Number(lodgeId) );
             if(!findLodge) return res.status(404).send({ message: "Cabaña no econtrada.." });
-            if(findLodge.available === true) {
-                if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
-                const conflict = await this.#confirmReservationDate(modifiedData, lodgeId, id);
-                if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
-                const reservation = await reservationsDao.updateFile( Number(id), modifiedData );
-                return res.status(201).send([{ message: "Reserva creada con éxito..", reservation }]);
-            } else {
-                return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
-            }
+            if(findLodge.available === false) return res.status(400).send({ message: "Esa cabaña no esta disponible.." });
+            if(modifiedData.people > findLodge.capacity) return res.status(400).send({ message: `La capacidad maxima es de ${findLodge.capacity} personas..` });
+            const conflict = await this.#confirmReservationDate(modifiedData, lodgeId, id);
+            if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
+            const reservation = await reservationsDao.updateFile( Number(id), modifiedData );
+            return res.status(201).send([{ message: "Reserva creada con éxito..", reservation }]);
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
