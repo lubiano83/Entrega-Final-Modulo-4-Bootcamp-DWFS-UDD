@@ -2,7 +2,7 @@ import transporter from "../config/mailer.config.js";
 
 export const sendReservationEmail = async (reservation) => {
     try {
-        const imageUrl = `https://backend-sistema-de-reservas.onrender.com/logo.webp`; // URL de la imagen
+        const imageUrl = `https://backend-sistema-de-reservas.onrender.com/logo.webp`;
         const mailOptions = {
             from: `"Reservas Cabañas" <${process.env.MAIL_USER}>`,
             to: reservation.email,

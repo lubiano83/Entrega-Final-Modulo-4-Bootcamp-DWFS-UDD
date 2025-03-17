@@ -1,15 +1,15 @@
 import nodemailer from "nodemailer";
 import dotenv from "dotenv";
 
-dotenv.config(); // Carga variables de entorno desde .env
+dotenv.config();
 
 const transporter = nodemailer.createTransport({
-    host: process.env.MAIL_HOST, // SMTP Host (Ej: smtp.gmail.com)
-    port: process.env.MAIL_PORT, // Puerto SMTP (465 o 587)
-    secure: process.env.MAIL_SECURE === "true", // true para 465, false para otros
+    host: process.env.MAIL_HOST,
+    port: process.env.MAIL_PORT,
+    secure: process.env.MAIL_SECURE === "true",
     auth: {
-        user: process.env.MAIL_USER, // Tu email
-        pass: process.env.MAIL_PASS, // Contraseña o App Password
+        user: process.env.MAIL_USER,
+        pass: process.env.MAIL_PASS,
     },
 });
 

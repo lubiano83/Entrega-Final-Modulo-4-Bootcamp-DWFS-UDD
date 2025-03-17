@@ -9,7 +9,7 @@ const swaggerOptions = {
             description: "App dedicada a la administración y reserva de cabañas para hospedaje."
         }
     },
-    apis: ["./src/docs/*.yaml"] // Esto lee todos las carpetas y sus archivos .yaml dentro de docs.
+    apis: ["./src/docs/*.yaml"]
 }
 
 const swaggerSpecs = swaggerJSDoc(swaggerOptions);
