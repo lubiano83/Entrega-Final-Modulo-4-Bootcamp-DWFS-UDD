@@ -3,32 +3,16 @@
 		"id": 1,
 		"hotel": "las trancas",
 		"img": [],
-		"size": 69,
-		"bedroom": 3,
-		"bathroom": 2,
-		"capacity": 6,
-		"wifi": false,
-		"season": {
-			"high": 200,
-			"medium": 150,
-			"low": 100
-		},
-		"available": true
-	},
-	{
-		"id": 2,
-		"hotel": "cabañas el bosque",
-		"img": [],
-		"size": 50,
+		"size": 56,
 		"bedroom": 2,
 		"bathroom": 1,
 		"capacity": 4,
 		"wifi": false,
 		"season": {
-			"high": 150000,
-			"medium": 120000,
-			"low": 100000
+			"high": 130,
+			"medium": 100,
+			"low": 80
 		},
-		"available": false
+		"available": true
 	}
 ]

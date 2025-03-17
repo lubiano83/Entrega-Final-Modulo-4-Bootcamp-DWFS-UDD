@@ -2,6 +2,7 @@ import ReservationsDao from "../dao/reservations.dao.js";
 import LodgesDao from "../dao/lodges.dao.js";
 import RecordsDao from "../dao/records.dao.js";
 import SeasonsDao from "../dao/seasons.dao.js";
+import { sendReservationEmail } from "../utils/mailer.utils.js";
 
 const reservationsDao = new ReservationsDao();
 const lodgesDao = new LodgesDao();
@@ -115,6 +116,8 @@ export default class ReservationsController {
             const conflict = await this.#confirmReservationDate(modifiedData, lodgeId);
             if (conflict) return res.status(400).send({ message: "Esta cabaña ya está reservada en las fechas seleccionadas.." });
             await reservationsDao.createFile(modifiedData);
+            const emailResponse = await sendReservationEmail(modifiedData);
+            if (!emailResponse.success) return res.status(500).send({ message: "Reserva creada, pero hubo un error al enviar el email.", error: emailResponse.error });
             return res.status(201).send([{ message: "Reserva creada con éxito..", modifiedData }]);
         } catch (error) {
             return res.status(500).send({ message: "Error interno del servidor..", error: error.message });

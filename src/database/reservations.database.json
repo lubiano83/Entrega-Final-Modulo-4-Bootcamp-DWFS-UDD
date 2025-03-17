@@ -1,6 +1,6 @@
 [
 	{
-		"id": 2,
+		"id": 1,
 		"name": "papo lubiano",
 		"email": "lubiano83@gmail.com",
 		"phone": "+56988310042",
@@ -12,45 +12,9 @@
 		},
 		"lodgeId": 1,
 		"people": 4,
-		"arrive": "2025-03-10T03:00:00.000Z",
-		"leave": "2025-03-16T00:00:00.000Z",
-		"price": 600,
-		"paid": false
-	},
-	{
-		"id": 3,
-		"name": "papo lubiano",
-		"email": "lubiano83@gmail.com",
-		"phone": "+56988310042",
-		"address": {
-			"region": "valparaiso",
-			"city": "concon",
-			"street": "calle del sol",
-			"number": "85"
-		},
-		"lodgeId": 1,
-		"people": 4,
-		"arrive": "2025-03-16T00:00:00.000Z",
-		"leave": "2025-03-20T00:00:00.000Z",
-		"price": 400,
-		"paid": false
-	},
-	{
-		"id": 4,
-		"name": "juan pérez",
-		"email": "juan.perez@example.com",
-		"phone": "+56912345678",
-		"address": {
-			"region": "valparaíso",
-			"city": "concón",
-			"street": "avenida siempre viva",
-			"number": "123"
-		},
-		"lodgeId": 1,
-		"people": 4,
-		"arrive": "2025-07-01T00:00:00.000Z",
-		"leave": "2025-07-07T00:00:00.000Z",
-		"price": 1200,
+		"arrive": "2025-03-20T00:00:00.000Z",
+		"leave": "2025-03-24T00:00:00.000Z",
+		"price": 320,
 		"paid": false
 	}
 ]
