@@ -1,0 +1,107 @@
+info:
+  title: "Documentación de la App de Reservas de Cabañas"
+  description: "API para administrar reservas y gestionar registros de pagos"
+
+paths:
+  /api/records:
+    get:
+      summary: Obtiene todos los registros de reservas pagadas
+      tags:
+        - Records
+      responses:
+        "200":
+          description: Lista de registros obtenida correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  records:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Record"
+        "500":
+          description: Error interno del servidor
+
+    delete:
+      summary: Elimina todos los registros
+      tags:
+        - Records
+      responses:
+        "200":
+          description: Todos los registros eliminados correctamente
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                  records:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Record"
+        "500":
+          description: Error interno del servidor
+
+  /api/records/{id}:
+    delete:
+      summary: Elimina un registro por ID
+      tags:
+        - Records
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Registro eliminado correctamente
+        "500":
+          description: Error interno del servidor
+
+components:
+  schemas:
+    Record:
+      type: object
+      properties:
+        id:
+          type: integer
+        lodgeId:
+          type: integer
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+            email:
+              type: string
+              format: email
+            phone:
+              type: string
+        stay:
+          type: object
+          properties:
+            arrive:
+              type: string
+              format: date
+            leave:
+              type: string
+              format: date
+        totalPaid:
+          type: number
+          format: float
+      example:
+        id: 1
+        lodgeId: 10
+        user:
+          name: "Juan Pérez"
+          email: "juan.perez@example.com"
+          phone: "+56912345678"
+        stay:
+          arrive: "2025-07-01"
+          leave: "2025-07-07"
+        totalPaid: 500000.00
