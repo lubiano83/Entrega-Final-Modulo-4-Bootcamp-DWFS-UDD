@@ -26,9 +26,18 @@ export class SeasonsController {
                 midSeasonEnd: await this.#validateDate(midSeasonEnd.month, midSeasonEnd.day),
             };
             await seasonsDao.createFile(seasonsData);
-            return res.status(200).json({ message: "Temporadas actualizadas correctamente", seasons: seasonsData });
+            return res.status(200).send({ message: "Temporadas actualizadas correctamente..", seasons: seasonsData });
         } catch (error) {
-            return res.status(500).json({ message: "Error interno del servidor", error: error.message });
+            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
+        }
+    };
+
+    getSeason = async(req, res) => {
+        try {
+            const seasons = await seasonsDao.readFile();
+            return res.status(200).send({ message: "Todas las temporadas disponibles", seasons });
+        } catch (error) {
+            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
     };
 }

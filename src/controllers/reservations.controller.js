@@ -78,9 +78,9 @@ export default class ReservationsController {
                     return (new Date(a[sortKey]) - new Date(b[sortKey])) * orderFactor;
                 });
             }
-            return res.status(200).send({ message: "Todas las reservas ordenadas.", reservations });
+            return res.status(200).send({ message: "Todas las reservas ordenadas..", reservations });
         } catch (error) {
-            return res.status(500).send({ message: "Error interno del servidor.", error: error.message });
+            return res.status(500).send({ message: "Error interno del servidor..", error: error.message });
         }
     };    
 
