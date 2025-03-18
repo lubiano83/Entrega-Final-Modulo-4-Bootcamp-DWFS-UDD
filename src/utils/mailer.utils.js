@@ -8,15 +8,18 @@ export const sendReservationEmail = async (reservation) => {
             to: reservation.email,
             subject: "Confirmación de Reserva",
             html: `
-                <div style="text-align: center;">
-                    <img src="${imageUrl}" alt="Logo Cabañas" style="width: 150px; height: auto;">
-                    <h2>Hola ${reservation.name}, tu reserva ha sido confirmada.</h2>
-                    <p><strong>Fecha de llegada:</strong> ${new Date(reservation.arrive).toLocaleDateString()}</p>
-                    <p><strong>Fecha de salida:</strong> ${new Date(reservation.leave).toLocaleDateString()}</p>
-                    <p><strong>Cabaña:</strong> ${reservation.lodgeId}</p>
-                    <p><strong>Personas:</strong> ${reservation.people}</p>
-                    <p><strong>Total a pagar:</strong> $${reservation.price}</p>
-                    <br/>
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                    <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
+                        <img src="${imageUrl}" alt="Logo Cabañas" style="width: 150px; height: auto;">
+                    </div>
+                    <div style="display: flex; flex-direction: column; align-items: start;">
+                        <h2>Hola ${reservation.name}, tu reserva ha sido confirmada.</h2>
+                        <p><strong>Fecha de llegada:</strong> ${new Date(reservation.arrive).toLocaleDateString()}</p>
+                        <p><strong>Fecha de salida:</strong> ${new Date(reservation.leave).toLocaleDateString()}</p>
+                        <p><strong>Cabaña:</strong> ${reservation.lodgeId}</p>
+                        <p><strong>Personas:</strong> ${reservation.people}</p>
+                        <p><strong>Total a pagar:</strong> $${reservation.price}</p>
+                    </div>
                     <p>Gracias por elegirnos. ¡Esperamos verte pronto!</p>
                 </div>
             `,
