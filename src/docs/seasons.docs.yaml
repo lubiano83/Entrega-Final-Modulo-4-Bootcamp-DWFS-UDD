@@ -3,7 +3,7 @@ info:
   description: "API para gestionar temporadas (high y mid season)."
 
 paths:
-  /:
+  /api/seasons:
     get:
       summary: "Obtiene todas las temporadas disponibles"
       description: "Devuelve todas las temporadas registradas en el sistema."
@@ -72,7 +72,7 @@ paths:
                   error:
                     type: string
                     example: "Detalles del error"
-
+                    
     post:
       summary: "Establece las fechas de las temporadas"
       description: "Permite registrar las fechas de inicio y fin de la temporada alta y media en un solo objeto."
