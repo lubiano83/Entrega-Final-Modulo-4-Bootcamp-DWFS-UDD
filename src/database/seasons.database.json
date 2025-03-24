@@ -2,20 +2,20 @@
 	{
 		"id": 1,
 		"highSeasonStart": {
-			"month": 6,
-			"day": 15
+			"month": 12,
+			"day": 20
 		},
 		"highSeasonEnd": {
-			"month": 9,
+			"month": 2,
 			"day": 15
 		},
 		"midSeasonStart": {
-			"month": 9,
-			"day": 15
+			"month": 6,
+			"day": 10
 		},
 		"midSeasonEnd": {
-			"month": 3,
-			"day": 15
+			"month": 8,
+			"day": 25
 		}
 	}
 ]
