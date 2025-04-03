@@ -16,5 +16,23 @@
 		"leave": "2025-03-24T00:00:00.000Z",
 		"price": 320,
 		"paid": false
+	},
+	{
+		"id": 2,
+		"name": "juan pérez",
+		"email": "lucalubiano92@gmail.com",
+		"phone": "+56912345678",
+		"address": {
+			"region": "valparaíso",
+			"city": "concón",
+			"street": "avenida siempre viva",
+			"number": "123"
+		},
+		"lodgeId": 1,
+		"people": 4,
+		"arrive": "2025-07-01T00:00:00.000Z",
+		"leave": "2025-07-07T00:00:00.000Z",
+		"price": 600,
+		"paid": false
 	}
 ]

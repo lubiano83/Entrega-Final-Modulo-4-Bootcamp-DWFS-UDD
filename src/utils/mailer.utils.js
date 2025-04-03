@@ -8,7 +8,7 @@ export const sendReservationEmail = async (reservation) => {
             to: reservation.email,
             subject: "Confirmación de Reserva",
             html: `
-                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0px 30px 0px 30px;">
                     <div style="width: 100%; display: flex; justify-content: center; align-items: center;">
                         <img src="${imageUrl}" alt="Logo Cabañas" style="width: 150px; height: auto;">
                     </div>
