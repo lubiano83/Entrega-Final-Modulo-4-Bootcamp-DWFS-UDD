@@ -3,7 +3,7 @@
 		"id": 1,
 		"hotel": "las trancas",
 		"img": [],
-		"size": 56,
+		"size": 49,
 		"bedroom": 2,
 		"bathroom": 1,
 		"capacity": 4,
@@ -13,6 +13,6 @@
 			"medium": 100,
 			"low": 80
 		},
-		"available": true
+		"available": false
 	}
 ]

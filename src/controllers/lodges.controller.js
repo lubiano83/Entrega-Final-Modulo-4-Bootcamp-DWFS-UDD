@@ -43,7 +43,7 @@ export default class LodgesController {
             const { hotel, size, bedroom, bathroom, capacity, season } = data;
             const { high, medium, low } = season;
             if( !hotel, !size, !bedroom, !bathroom, !capacity, !high, !medium, !low ) return res.status(400).send({ message: "Todos los campos son requeridos.." });
-            const modifiedData = { hotel: hotel.toLowerCase().trim(), img: [], size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: Boolean(false), season: { high: Number(high), medium: Number(medium), low: Number(low) }, available: Boolean(false)};
+            const modifiedData = { hotel: hotel.toLowerCase().trim(), img: [], size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: false, season: { high: Number(high), medium: Number(medium), low: Number(low) }, available: false };
             if(isNaN(Number(size)) || isNaN(Number(bedroom)) || isNaN(Number(bathroom)) || isNaN(Number(capacity)) || isNaN(Number(high)) || isNaN(Number(medium)) || isNaN(Number(low))) return res.send({ message: "El cambo: size, bedroom, bathroom, capacity, high, medium, low, deben ser tipo number.." });
             await lodgesDao.createFile(modifiedData);
             return res.status(201).send([{ message: "Cabaña creado con exito..", modifiedData }]);
@@ -69,7 +69,9 @@ export default class LodgesController {
             const { id } = req.params;
             const data = req.body;
             const { hotel, size, bedroom, bathroom, capacity, wifi, season } = data;
-            const modifyData = { hotel: hotel, size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: wifi === "true" || wifi === true ? true : wifi === "false" || wifi === false ? false : null, season: { high: Number(season.high), medium: Number(season.medium), low: Number(season.low) }};
+            const modifiedWifi = String(wifi).toLowerCase().trim() === "true" ? true : String(wifi).toLowerCase().trim() === "false" ? false : wifi;
+            if(typeof modifiedWifi !== "boolean") return res.status(400).send({ message: "El campo wifi debe ser true o false.." });
+            const modifyData = { hotel: hotel, size: Number(size), bedroom: Number(bedroom), bathroom: Number(bathroom), capacity: Number(capacity), wifi: modifiedWifi, season: { high: Number(season.high), medium: Number(season.medium), low: Number(season.low) }};
             if(modifyData.wifi === null) return res.send({ message: "El campo: wifi, debe ser un boolean.." });
             if(isNaN(Number(modifyData.size)) || isNaN(Number(modifyData.bedroom)) || isNaN(Number(modifyData.bathroom)) || isNaN(Number(modifyData.capacity)) || isNaN(Number(modifyData.season.high)) || isNaN(Number(modifyData.season.medium)) || isNaN(Number(modifyData.season.low))) return res.send({ message: "El cambo: size, bedroom, bathroom, capacity, high, medium, low, deben ser tipo number.." });
             const updated = await lodgesDao.readFileById( Number(id) );
