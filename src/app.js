@@ -7,8 +7,8 @@ import { swaggerServe, swaggerSetup } from "./config/swagger.config.js";
 
 // Variables
 const APP = express();
-const PORT = process.env.PORT || 8080;
-const HOST = "0.0.0.0";
+const PORT = 8080;
+const HOST = "localhost";
 
 // Middlewares
 APP.use(express.json());
