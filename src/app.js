@@ -24,7 +24,7 @@ APP.use("/api/records", recordsRouter);
 APP.use("/api/docs", swaggerServe, swaggerSetup);
 
 // Método que gestiona las rutas inexistentes.
-APP.use("*", (req, res) => {
+APP.use((req, res) => {
     return res.status(404).send("<h1>Error 404: Not Found</h1>");
 });
 
@@ -35,4 +35,4 @@ APP.use((error, req, res) => {
 });
 
 // Listening
-APP.listen(PORT, HOST, () => console.log(`Escuchando en http://${HOST}:${PORT}`));
+APP.listen(PORT, () => console.log(`Escuchando en http://${HOST}:${PORT}`));
